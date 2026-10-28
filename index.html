@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>Rond Point ou Fake</title>
-  <meta name="description" content="Trois images, une seule vraie photo de rond-point. Saurez-vous la repérer face à deux fausses images d'IA ?">
+  <meta name="description" content="Deux images, une seule vraie photo de rond-point. Saurez-vous la repérer face à une fausse image d'IA ?">
   <meta name="theme-color" content="#3A0D22">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -84,7 +84,7 @@
       <section id="view-start" class="panel start" hidden>
         <img class="start-mark" src="icons/icon.svg" alt="" width="104" height="104">
         <h1>Vrai rond-point<br>ou <em>fake</em> ?</h1>
-        <p class="lead">Trois images par tour, une seule vraie photo. Une erreur et c'est fini.</p>
+        <p class="lead">Deux images par tour : une vraie photo, une fausse générée par IA. Une erreur et c'est fini.</p>
 
         <fieldset class="field levels">
           <legend>Niveau de difficulté</legend>
@@ -122,7 +122,7 @@
         <div class="cards" id="cards" role="group" aria-label="Choisissez l'image authentique"></div>
 
         <div class="feedback" id="feedback" aria-live="polite">
-          <p class="feedback-text" id="feedback-text">Clique sur une image, ou touche 1, 2 ou 3.</p>
+          <p class="feedback-text" id="feedback-text">Clique sur une image, ou touche 1 ou 2.</p>
           <button class="btn btn-primary" id="btn-next" type="button" hidden>Tour suivant</button>
         </div>
       </section>
@@ -174,9 +174,9 @@
     <form method="dialog">
       <h2>Comment jouer</h2>
       <ol class="rules">
-        <li>Chaque tour affiche trois images : une vraie photo de rond-point, deux fausses générées par IA.</li>
+        <li>Chaque tour affiche deux images : une vraie photo de rond-point et une fausse générée par IA.</li>
         <li>Choisis un niveau : <strong>Facile</strong> (IA grossières), <strong>Moyen</strong> (IA crédibles) ou <strong>Difficile</strong> (IA très réussies).</li>
-        <li>Clique sur l'image que tu crois authentique (ou touche <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd>).</li>
+        <li>Clique sur l'image que tu crois authentique (ou touche <kbd>1</kbd> ou <kbd>2</kbd>).</li>
         <li><strong>Mort subite</strong> : une seule mauvaise réponse et la partie s'arrête.</li>
         <li>Bonne réponse : <strong>+100 points</strong>, plus <strong>+25</strong> par victoire consécutive (jusqu'à +250). Chaque niveau a son record.</li>
         <li>Une image déjà vue ne revient jamais, même après avoir fermé l'onglet.</li>

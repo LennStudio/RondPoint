@@ -1,5 +1,5 @@
 /* Service worker — fonctionnement hors ligne */
-const VERSION = 'v2';
+const VERSION = 'v3';
 const CACHE = `rondpointoufake-${VERSION}`;
 
 const SHELL = [

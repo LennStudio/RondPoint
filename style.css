@@ -282,7 +282,7 @@ h2 { margin: 0; font-size: 1.7rem; letter-spacing: 0.01em; }
 .prompt { display: flex; align-items: baseline; justify-content: space-between; gap: 16px; margin-bottom: 16px; }
 .round-info { margin: 0; color: var(--muted); font-size: 0.95rem; }
 
-.cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 22px; }
+.cards { display: grid; grid-template-columns: repeat(2, 1fr); gap: 26px; }
 
 .card {
   position: relative;
@@ -293,13 +293,12 @@ h2 { margin: 0; font-size: 1.7rem; letter-spacing: 0.01em; }
   overflow: hidden;
   cursor: pointer;
   background: var(--bg-deep);
-  aspect-ratio: 4 / 3;
+  aspect-ratio: 16 / 10;
   box-shadow: 0 0 0 3px transparent, 0 12px 28px var(--shadow-drop);
   transition: transform .18s ease, box-shadow .18s ease, filter .25s ease;
   animation: rise .45s ease both;
 }
-.card:nth-child(2) { animation-delay: .07s; }
-.card:nth-child(3) { animation-delay: .14s; }
+.card:nth-child(2) { animation-delay: .08s; }
 @keyframes rise {
   from { opacity: 0; transform: translateY(14px); }
   to { opacity: 1; transform: none; }
@@ -441,8 +440,8 @@ kbd {
   .round-info { font-size: 0.85rem; }
   h2 { font-size: 1.3rem; }
 
-  .cards { grid-template-columns: 1fr; gap: 10px; }
-  .card { aspect-ratio: 16 / 6.6; }
+  .cards { grid-template-columns: 1fr; gap: 12px; }
+  .card { aspect-ratio: 3 / 2; }
   .card .num { width: 30px; height: 30px; top: 8px; left: 8px; }
   .card .pick { top: 8px; right: 8px; font-size: 0.65rem; }
   .card .tag { bottom: 8px; left: 8px; right: 8px; padding: 6px 10px; font-size: 0.75rem; }

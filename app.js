@@ -225,17 +225,17 @@
       fake: catalog.fake.filter((i) => !seen.has(i.id) && (isLevel(i.difficulty) ? i.difficulty : 'medium') === level),
     };
   }
-  const roundsOf = (p) => Math.min(p.real.length, Math.floor(p.fake.length / 2));
+  const roundsOf = (p) => Math.min(p.real.length, p.fake.length); // un tour = 1 vraie + 1 IA
   const roundsLeft = (level) => roundsOf(pools(level));
   const roundsTotal = (level) => roundsOf(pools(level, true));
 
   function pickRound(level) {
     const pool = pools(level);
-    if (pool.real.length < 1 || pool.fake.length < 2) return null;
+    if (pool.real.length < 1 || pool.fake.length < 1) return null;
     const real = shuffle(pool.real)[0];
-    const fakes = shuffle(pool.fake).slice(0, 2);
+    const fake = shuffle(pool.fake)[0];
     return {
-      ids: shuffle([real, ...fakes]).map((i) => i.id),
+      ids: shuffle([real, fake]).map((i) => i.id),
       realId: real.id,
       answered: false,
       choice: null,
@@ -284,7 +284,7 @@
     }
     r.gained = gained;
 
-    // Les trois images sont désormais « passées » : elles ne reviendront plus.
+    // Les deux images sont désormais « passées » : elles ne reviendront plus.
     r.ids.forEach((id) => { if (!memory.seen.includes(id)) memory.seen.push(id); });
 
     // Meilleur score du niveau, mis à jour en temps réel
@@ -408,7 +408,7 @@
       : `${levelLabel(g.difficulty)} · tour ${played + 1} sur ${played + left} max`;
 
     el.feedback.className = 'feedback';
-    el.feedbackText.textContent = 'Clique sur une image, ou touche 1, 2 ou 3. Une erreur et c\'est fini.';
+    el.feedbackText.textContent = 'Clique sur une image, ou touche 1 ou 2. Une erreur et c\'est fini.';
     el.btnNext.hidden = true;
 
     if (r.answered) revealRound();
@@ -501,7 +501,7 @@
     if (!canPlay) {
       el.startNotice.textContent = anyTotal
         ? 'Toutes les images ont été vues.'
-        : 'Aucune image jouable : il faut au moins 1 vraie photo et 2 images IA d\'un même niveau. Ajoute tes fichiers dans images/ puis lance tools/build_images_json.py (voir le README).';
+        : 'Aucune image jouable : il faut au moins 1 vraie photo et 1 image IA d\'un même niveau. Ajoute tes fichiers dans images/ puis lance tools/build_images_json.py (voir le README).';
     }
 
     const seen = memory.seen.length;
@@ -586,7 +586,7 @@
     if (document.querySelector('dialog[open]')) return;
     if (el.viewPlay.hidden) return;
     const n = Number(e.key);
-    if (n >= 1 && n <= 3) answer(n - 1);
+    if (n >= 1 && n <= 2) answer(n - 1);
   });
 
   /* ---------- Installation PWA ---------- */
@@ -634,7 +634,8 @@
 
     // Reprise d'une partie interrompue (rechargement de page)
     const r = memory.round;
-    const roundValid = r && Array.isArray(r.ids) && r.ids.every((id) => byId.has(id)) && byId.has(r.realId);
+    // (un tour sauvegardé avec un autre nombre d'images est abandonné)
+    const roundValid = r && Array.isArray(r.ids) && r.ids.length === 2 && r.ids.every((id) => byId.has(id)) && byId.has(r.realId);
     if (memory.game && roundValid) {
       showPlay();
     } else {

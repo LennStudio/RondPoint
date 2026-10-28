@@ -1,7 +1,7 @@
 {
   "name": "Rond Point ou Fake",
   "short_name": "Rond Point",
-  "description": "Trois images, une seule vraie photo de rond-point. Repère-la face à deux fausses images d'IA.",
+  "description": "Deux images, une seule vraie photo de rond-point. Repère-la face à une fausse image d'IA.",
   "lang": "fr",
   "dir": "ltr",
   "id": "./",

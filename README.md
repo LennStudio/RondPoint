@@ -1,6 +1,6 @@
 # Rond Point ou Fake
 
-Jeu PWA : trois images par tour, une seule vraie photo de rond-point, deux images générées par IA.
+Jeu PWA : deux images par tour, une vraie photo de rond-point et une image générée par IA. Il faut trouver la vraie.
 **Mort subite** : une seule erreur et la partie s'arrête. Trois niveaux de difficulté.
 
 ## Lancer
@@ -42,7 +42,7 @@ Le script écrit `data/images.json` (champ `difficulty` inclus) et affiche le no
   "fake": [ { "id": "fake-hard-01", "src": "images/fake-hard-01.png", "difficulty": "hard" } ] }
 ```
 
-Un tour demande 1 vraie photo et 2 images IA du niveau choisi, jamais revues. Prévois donc au moins 2 fois plus d'images IA que de vraies photos. Les vraies photos sont partagées entre les niveaux : une photo vue en facile ne reviendra pas en moyen.
+Un tour demande 1 vraie photo et 1 image IA du niveau choisi, jamais revues. Prévois donc autant d'images IA que de vraies photos, pour chaque niveau. Les vraies photos sont partagées entre les niveaux : une photo vue en facile ne reviendra pas en moyen.
 
 ## Fonctionnalités
 

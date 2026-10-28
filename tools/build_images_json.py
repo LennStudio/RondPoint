@@ -58,7 +58,7 @@ def main():
     for lv in LEVELS:
         r = [i for i in real if i.get("difficulty", lv) == lv]
         f = [i for i in fake if i["difficulty"] == lv]
-        rounds = min(len(r), len(f) // 2)
+        rounds = min(len(r), len(f))  # un tour = 1 vraie + 1 IA
         print(f"  {lv:<7} : {len(r)} vraies, {len(f)} IA -> {rounds} tour(s) possible(s)")
 
 
