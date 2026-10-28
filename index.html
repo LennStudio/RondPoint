@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Rond Point ou Fake</title>
+  <meta name="description" content="Trois images, une seule vraie photo de rond-point. Saurez-vous la repérer face à deux fausses images d'IA ?">
+  <meta name="theme-color" content="#3A0D22">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+
+    <header class="topbar">
+      <a class="brand" href="./" aria-label="Rond Point ou Fake">
+        <img src="icons/icon.svg" alt="" width="44" height="44">
+        <span class="brand-name">Rond Point <em>ou Fake</em></span>
+      </a>
+      <div class="actions">
+        <button class="btn btn-ghost" id="btn-install" type="button" hidden>Installer</button>
+        <button class="btn btn-ghost" id="btn-help" type="button">Règles</button>
+        <button class="btn btn-ghost" id="btn-history" type="button">Mes parties</button>
+      </div>
+    </header>
+
+    <section class="hud" aria-label="Score en temps réel">
+      <div class="stat stat-main">
+        <span class="stat-label">Score</span>
+        <span class="stat-value" id="stat-score">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Bonnes réponses</span>
+        <span class="stat-value" id="stat-correct">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Série</span>
+        <span class="stat-value" id="stat-streak">0</span>
+      </div>
+      <div class="stat">
+        <span class="stat-label">Meilleur score</span>
+        <span class="stat-value" id="stat-best">0</span>
+        <span class="stat-sub" id="stat-best-sub">série max : 0</span>
+      </div>
+      <div class="stat stat-lives">
+        <span class="stat-label">Vies</span>
+        <span class="lives" id="lives" role="img" aria-label="3 vies"></span>
+      </div>
+    </section>
+
+    <main class="stage">
+
+      <!-- Écran d'accueil -->
+      <section id="view-start" class="panel start" hidden>
+        <img class="start-mark" src="icons/icon.svg" alt="" width="120" height="120">
+        <h1>Vrai rond-point<br>ou <em>fake</em> ?</h1>
+        <p class="lead">Trois images par tour. Une seule est une vraie photo. Les deux autres sont inventées par une IA.</p>
+        <p class="notice" id="start-notice" hidden></p>
+        <div class="start-actions">
+          <button class="btn btn-primary btn-xl" id="btn-play" type="button">Jouer</button>
+          <button class="btn btn-ghost btn-xl" id="btn-reset-seen" type="button" hidden>Réinitialiser les images vues</button>
+        </div>
+        <p class="hint" id="start-hint"></p>
+      </section>
+
+      <!-- Écran de jeu -->
+      <section id="view-play" hidden>
+        <div class="prompt">
+          <h2>Laquelle est la <em>vraie</em> photo ?</h2>
+          <p class="round-info" id="round-info"></p>
+        </div>
+
+        <div class="cards" id="cards" role="group" aria-label="Choisissez l'image authentique"></div>
+
+        <div class="feedback" id="feedback" aria-live="polite">
+          <p class="feedback-text" id="feedback-text">Clique sur une image, ou touche 1, 2 ou 3.</p>
+          <button class="btn btn-primary" id="btn-next" type="button" hidden>Tour suivant</button>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="footer">
+      <span>Meilleur score enregistré dans ton navigateur.</span>
+    </footer>
+  </div>
+
+  <!-- Fin de partie -->
+  <dialog id="dlg-end" class="dialog">
+    <form method="dialog">
+      <h2 id="end-title">Partie terminée</h2>
+      <p id="end-text" class="lead"></p>
+      <dl class="summary" id="end-summary"></dl>
+      <p class="record" id="end-record" hidden>Nouveau record !</p>
+      <div class="dialog-actions">
+        <button class="btn btn-primary" value="ok">Continuer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Historique -->
+  <dialog id="dlg-history" class="dialog dialog-wide">
+    <form method="dialog">
+      <h2>Mes parties</h2>
+      <p class="lead" id="history-summary"></p>
+      <div class="table-wrap">
+        <table class="history">
+          <thead>
+            <tr><th>Date</th><th>Score</th><th>Bonnes</th><th>Série max</th><th>Tours</th></tr>
+          </thead>
+          <tbody id="history-body"></tbody>
+        </table>
+      </div>
+      <p class="hint" id="history-empty" hidden>Aucune partie terminée pour l'instant.</p>
+      <div class="dialog-actions">
+        <button class="btn btn-ghost" type="button" id="btn-clear-seen">Réinitialiser les images vues</button>
+        <button class="btn btn-ghost btn-danger" type="button" id="btn-clear-all">Tout effacer</button>
+        <button class="btn btn-primary" value="close">Fermer</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Règles -->
+  <dialog id="dlg-help" class="dialog">
+    <form method="dialog">
+      <h2>Comment jouer</h2>
+      <ol class="rules">
+        <li>Chaque tour affiche trois images : une vraie photo de rond-point, deux fausses générées par IA.</li>
+        <li>Clique sur celle que tu crois authentique (ou touche <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd>).</li>
+        <li>Bonne réponse : <strong>+100 points</strong>, plus un bonus de <strong>+25</strong> par victoire consécutive (jusqu'à +250).</li>
+        <li>Mauvaise réponse : tu perds une vie et ta série retombe à zéro. Trois vies par partie.</li>
+        <li>Une image déjà vue ne revient jamais, même après avoir fermé l'onglet.</li>
+      </ol>
+      <div class="dialog-actions">
+        <button class="btn btn-primary" value="ok">Compris</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js" defer></script>
+</body>
+</html>
