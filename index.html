@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" data-theme="dark">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
@@ -9,6 +9,20 @@
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <!-- Applique thème et mode daltonien avant le premier affichage (évite le flash) -->
+  <script>
+    (function () {
+      var root = document.documentElement;
+      try {
+        var m = JSON.parse(localStorage.getItem('rondpointoufake:v2') || '{}');
+        var s = m.settings || {};
+        var t = s.theme || 'dark';
+        if (t === 'auto') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+        root.dataset.theme = t === 'light' ? 'light' : 'dark';
+        if (s.colorblind) root.dataset.cb = 'on';
+      } catch (e) { root.dataset.theme = 'dark'; }
+    })();
+  </script>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -20,9 +34,26 @@
         <span class="brand-name">Rond Point <em>ou Fake</em></span>
       </a>
       <div class="actions">
-        <button class="btn btn-ghost" id="btn-install" type="button" hidden>Installer</button>
-        <button class="btn btn-ghost" id="btn-help" type="button">Règles</button>
-        <button class="btn btn-ghost" id="btn-history" type="button">Mes parties</button>
+        <button class="btn btn-ghost btn-icon" id="btn-install" type="button" hidden>
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 19h14"/></svg>
+          <span class="label">Installer</span>
+        </button>
+        <button class="btn btn-ghost btn-icon" id="btn-help" type="button" aria-label="Règles">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.5 9.5a2.5 2.5 0 1 1 3.5 2.3c-.7.4-1 .9-1 1.7"/><path d="M12 17.2h.01"/></svg>
+          <span class="label">Règles</span>
+        </button>
+        <button class="btn btn-ghost btn-icon" id="btn-history" type="button" aria-label="Mes parties">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>
+          <span class="label">Mes parties</span>
+        </button>
+        <button class="btn btn-ghost btn-icon" id="btn-settings" type="button" aria-label="Réglages">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg>
+          <span class="label">Réglages</span>
+        </button>
+        <button class="btn btn-ghost btn-icon" id="btn-sound" type="button" aria-pressed="true" aria-label="Sons et vibrations" title="Couper les sons et vibrations">
+          <svg class="ico-on" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4z"/><path d="M16 9a4 4 0 0 1 0 6M18.5 6.5a8 8 0 0 1 0 11"/></svg>
+          <svg class="ico-off" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 10v4h3l5 4V6L7 10H4z"/><path d="M16 9.5l5 5M21 9.5l-5 5"/></svg>
+        </button>
       </div>
     </header>
 
@@ -36,17 +67,14 @@
         <span class="stat-value" id="stat-correct">0</span>
       </div>
       <div class="stat">
-        <span class="stat-label">Série</span>
-        <span class="stat-value" id="stat-streak">0</span>
+        <span class="stat-label">Niveau</span>
+        <span class="stat-value stat-value-text" id="stat-level">Facile</span>
+        <span class="stat-sub" id="stat-level-sub"></span>
       </div>
       <div class="stat">
         <span class="stat-label">Meilleur score</span>
         <span class="stat-value" id="stat-best">0</span>
-        <span class="stat-sub" id="stat-best-sub">série max : 0</span>
-      </div>
-      <div class="stat stat-lives">
-        <span class="stat-label">Vies</span>
-        <span class="lives" id="lives" role="img" aria-label="3 vies"></span>
+        <span class="stat-sub" id="stat-best-sub"></span>
       </div>
     </section>
 
@@ -54,9 +82,28 @@
 
       <!-- Écran d'accueil -->
       <section id="view-start" class="panel start" hidden>
-        <img class="start-mark" src="icons/icon.svg" alt="" width="120" height="120">
+        <img class="start-mark" src="icons/icon.svg" alt="" width="104" height="104">
         <h1>Vrai rond-point<br>ou <em>fake</em> ?</h1>
-        <p class="lead">Trois images par tour. Une seule est une vraie photo. Les deux autres sont inventées par une IA.</p>
+        <p class="lead">Trois images par tour, une seule vraie photo. Une erreur et c'est fini.</p>
+
+        <fieldset class="field levels">
+          <legend>Niveau de difficulté</legend>
+          <div class="seg seg-levels" id="levels">
+            <label>
+              <input type="radio" name="level" value="easy">
+              <span class="seg-box"><span class="seg-name">Facile</span><span class="seg-desc">IA grossières</span><span class="seg-count" data-count="easy"></span></span>
+            </label>
+            <label>
+              <input type="radio" name="level" value="medium">
+              <span class="seg-box"><span class="seg-name">Moyen</span><span class="seg-desc">IA crédibles</span><span class="seg-count" data-count="medium"></span></span>
+            </label>
+            <label>
+              <input type="radio" name="level" value="hard">
+              <span class="seg-box"><span class="seg-name">Difficile</span><span class="seg-desc">IA très réussies</span><span class="seg-count" data-count="hard"></span></span>
+            </label>
+          </div>
+        </fieldset>
+
         <p class="notice" id="start-notice" hidden></p>
         <div class="start-actions">
           <button class="btn btn-primary btn-xl" id="btn-play" type="button">Jouer</button>
@@ -83,7 +130,7 @@
     </main>
 
     <footer class="footer">
-      <span>Meilleur score enregistré dans ton navigateur.</span>
+      <span>Meilleurs scores enregistrés dans ton navigateur, un record par niveau.</span>
     </footer>
   </div>
 
@@ -108,7 +155,7 @@
       <div class="table-wrap">
         <table class="history">
           <thead>
-            <tr><th>Date</th><th>Score</th><th>Bonnes</th><th>Série max</th><th>Tours</th></tr>
+            <tr><th>Date</th><th>Niveau</th><th>Score</th><th>Bonnes réponses</th></tr>
           </thead>
           <tbody id="history-body"></tbody>
         </table>
@@ -128,13 +175,50 @@
       <h2>Comment jouer</h2>
       <ol class="rules">
         <li>Chaque tour affiche trois images : une vraie photo de rond-point, deux fausses générées par IA.</li>
-        <li>Clique sur celle que tu crois authentique (ou touche <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd>).</li>
-        <li>Bonne réponse : <strong>+100 points</strong>, plus un bonus de <strong>+25</strong> par victoire consécutive (jusqu'à +250).</li>
-        <li>Mauvaise réponse : tu perds une vie et ta série retombe à zéro. Trois vies par partie.</li>
+        <li>Choisis un niveau : <strong>Facile</strong> (IA grossières), <strong>Moyen</strong> (IA crédibles) ou <strong>Difficile</strong> (IA très réussies).</li>
+        <li>Clique sur l'image que tu crois authentique (ou touche <kbd>1</kbd>, <kbd>2</kbd>, <kbd>3</kbd>).</li>
+        <li><strong>Mort subite</strong> : une seule mauvaise réponse et la partie s'arrête.</li>
+        <li>Bonne réponse : <strong>+100 points</strong>, plus <strong>+25</strong> par victoire consécutive (jusqu'à +250). Chaque niveau a son record.</li>
         <li>Une image déjà vue ne revient jamais, même après avoir fermé l'onglet.</li>
       </ol>
       <div class="dialog-actions">
         <button class="btn btn-primary" value="ok">Compris</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Réglages -->
+  <dialog id="dlg-settings" class="dialog">
+    <form method="dialog">
+      <h2>Réglages</h2>
+
+      <fieldset class="field">
+        <legend>Thème</legend>
+        <div class="seg seg-theme">
+          <label><input type="radio" name="theme" value="dark"><span class="seg-box"><span class="seg-name">Sombre</span></span></label>
+          <label><input type="radio" name="theme" value="light"><span class="seg-box"><span class="seg-name">Clair</span></span></label>
+          <label><input type="radio" name="theme" value="auto"><span class="seg-box"><span class="seg-name">Auto</span></span></label>
+        </div>
+      </fieldset>
+
+      <label class="switch">
+        <input type="checkbox" id="opt-cb">
+        <span class="switch-text">
+          <strong>Mode daltonien</strong>
+          <small>Bleu et orange à la place du jaune et du rose. Les résultats gardent aussi leurs symboles ✓ et ✕.</small>
+        </span>
+      </label>
+
+      <label class="switch">
+        <input type="checkbox" id="opt-sound">
+        <span class="switch-text">
+          <strong>Sons et vibrations</strong>
+          <small>Discrets, à chaque réponse. La vibration ne fonctionne que sur mobile.</small>
+        </span>
+      </label>
+
+      <div class="dialog-actions">
+        <button class="btn btn-primary" value="ok">Fermer</button>
       </div>
     </form>
   </dialog>

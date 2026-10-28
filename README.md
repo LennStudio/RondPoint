@@ -1,30 +1,57 @@
 # Rond Point ou Fake
 
 Jeu PWA : trois images par tour, une seule vraie photo de rond-point, deux images générées par IA.
+**Mort subite** : une seule erreur et la partie s'arrête. Trois niveaux de difficulté.
 
 ## Lancer
 
-Un service worker et `fetch()` exigent un serveur HTTP (pas `file://`) :
+Un service worker et `fetch()` exigent un serveur HTTP (pas `file://`). N'importe quel serveur statique convient :
 
 ```bash
 cd rond-point-ou-fake
-python3 -m http.server 8080
+python3 -m http.server 8080      # ou : npx serve   /   extension « Live Server » de VS Code
 # puis ouvrir http://localhost:8080
 ```
 
-## Remplacer les images d'exemple
+## Ajouter tes images
 
-Les 36 images de `images/` sont des **placeholders** (schémas de ronds-points). Remplace-les par tes vraies photos et tes images IA.
+Le dossier `images/` est **vide** : il faut y mettre tes fichiers (jpg, png, webp, avif, svg), puis régénérer la liste.
 
-1. Mets tous les fichiers dans `images/` (jpg, png, webp, avif, svg).
-2. Nomme-les par préfixe : `real-01.jpg`, `real-02.jpg`… pour les vraies photos, `fake-01.png`, `fake-02.png`… pour les images IA.
-3. Supprime les anciens placeholders `.svg`, puis régénère la liste :
+Le **nom du fichier** indique le type et, pour les images IA, le niveau :
+
+| Nom | Type | Niveau |
+|---|---|---|
+| `real-01.jpg` | vraie photo | tous les niveaux |
+| `real-hard-02.jpg` | vraie photo | difficile uniquement (optionnel) |
+| `fake-easy-01.png` | image IA grossière | facile |
+| `fake-medium-01.png` | image IA crédible | moyen |
+| `fake-hard-01.png` | image IA très réussie | difficile |
+| `fake-07.png` | image IA sans niveau | moyen (par défaut) |
+
+Puis :
 
 ```bash
 python3 tools/build_images_json.py
 ```
 
-Il faut au moins 1 vraie photo et 2 images IA par tour : prévois idéalement 2 fois plus d'images IA que de vraies photos.
+Le script écrit `data/images.json` (champ `difficulty` inclus) et affiche le nombre de tours possibles par niveau. Tu peux aussi éditer le JSON à la main :
+
+```json
+{ "version": 2,
+  "real": [ { "id": "real-01", "src": "images/real-01.jpg" } ],
+  "fake": [ { "id": "fake-hard-01", "src": "images/fake-hard-01.png", "difficulty": "hard" } ] }
+```
+
+Un tour demande 1 vraie photo et 2 images IA du niveau choisi, jamais revues. Prévois donc au moins 2 fois plus d'images IA que de vraies photos. Les vraies photos sont partagées entre les niveaux : une photo vue en facile ne reviendra pas en moyen.
+
+## Fonctionnalités
+
+- Niveaux Facile / Moyen / Difficile, avec un record par niveau.
+- Mort subite : la première mauvaise réponse termine la partie. Bonne réponse : +100 points, +25 par victoire consécutive (jusqu'à +250).
+- Thème sombre, clair ou automatique.
+- Mode daltonien : bleu et orange à la place du jaune et du rose, avec des symboles ✓ / ✕ et une pastille « Ton choix » en plus des couleurs.
+- Sons (synthétisés, aucun fichier) et vibrations discrets, coupables d'un clic avec le bouton haut-parleur.
+- Historique des parties et images déjà vues mémorisés dans `localStorage` (clé `rondpointoufake:v2`).
 
 ## Fichiers
 
@@ -32,11 +59,8 @@ Il faut au moins 1 vraie photo et 2 images IA par tour : prévois idéalement 2 
 |---|---|
 | `index.html`, `style.css`, `app.js` | Interface et jeu |
 | `manifest.json` | Manifeste PWA |
-| `sw.js` | Cache hors ligne |
-| `data/images.json` | Liste des images (id, chemin) |
+| `sw.js` | Cache hors ligne (incrémenter `VERSION` après avoir changé les fichiers) |
+| `data/images.json` | Liste des images (id, chemin, niveau) |
 | `images/` | Toutes les images |
 | `icons/` | Icônes (depuis `icon.svg`) |
-
-## Données enregistrées (localStorage, clé `rondpointoufake:v1`)
-
-Images déjà vues (jamais rejouées), historique des parties, meilleur score / meilleure série, partie en cours.
+| `tools/build_images_json.py` | Génère `data/images.json` |
