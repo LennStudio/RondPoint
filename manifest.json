@@ -1,7 +1,7 @@
 {
-  "name": "Rond Point ou Fake",
-  "short_name": "Rond Point",
-  "description": "Deux images, une seule vraie photo de rond-point. Repère-la face à une fausse image d'IA.",
+  "name": "Giratoire ou Fake",
+  "short_name": "Giratoire",
+  "description": "Deux images, une seule vraie photo de giratoire. Repère-la face à une fausse image d'IA.",
   "lang": "fr",
   "dir": "ltr",
   "id": "./",

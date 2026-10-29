@@ -3,8 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <title>Rond Point ou Fake</title>
-  <meta name="description" content="Deux images, une seule vraie photo de rond-point. Saurez-vous la repérer face à une fausse image d'IA ?">
+  <title>Giratoire ou Fake</title>
+  <meta name="description" content="Deux images, une seule vraie photo de giratoire. Saurez-vous la repérer face à une fausse image d'IA ?">
   <meta name="theme-color" content="#3A0D22">
   <link rel="manifest" href="manifest.json">
   <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
@@ -14,7 +14,7 @@
     (function () {
       var root = document.documentElement;
       try {
-        var m = JSON.parse(localStorage.getItem('rondpointoufake:v2') || '{}');
+        var m = JSON.parse(localStorage.getItem('giratoireoufake:v2') || localStorage.getItem('rondpointoufake:v2') || '{}');
         var s = m.settings || {};
         var t = s.theme || 'dark';
         if (t === 'auto') t = matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
@@ -29,9 +29,9 @@
   <div class="app">
 
     <header class="topbar">
-      <a class="brand" href="./" aria-label="Rond Point ou Fake">
+      <a class="brand" href="./" aria-label="Giratoire ou Fake">
         <img src="icons/icon.svg" alt="" width="44" height="44">
-        <span class="brand-name">Rond Point <em>ou Fake</em></span>
+        <span class="brand-name">Giratoire <em>ou Fake</em></span>
       </a>
       <div class="actions">
         <button class="btn btn-ghost btn-icon" id="btn-install" type="button" hidden>
@@ -83,7 +83,7 @@
       <!-- Écran d'accueil -->
       <section id="view-start" class="panel start" hidden>
         <img class="start-mark" src="icons/icon.svg" alt="" width="104" height="104">
-        <h1>Vrai rond-point<br>ou <em>fake</em> ?</h1>
+        <h1>Vrai giratoire<br>ou <em>fake</em> ?</h1>
         <p class="lead">Deux images par tour : une vraie photo, une fausse générée par IA. Une erreur et c'est fini.</p>
 
         <fieldset class="field levels">
@@ -174,7 +174,7 @@
     <form method="dialog">
       <h2>Comment jouer</h2>
       <ol class="rules">
-        <li>Chaque tour affiche deux images : une vraie photo de rond-point et une fausse générée par IA.</li>
+        <li>Chaque tour affiche deux images : une vraie photo de giratoire et une fausse générée par IA.</li>
         <li>Choisis un niveau : <strong>Facile</strong> (IA grossières), <strong>Moyen</strong> (IA crédibles) ou <strong>Difficile</strong> (IA très réussies).</li>
         <li>Clique sur l'image que tu crois authentique (ou touche <kbd>1</kbd> ou <kbd>2</kbd>).</li>
         <li><strong>Mort subite</strong> : une seule mauvaise réponse et la partie s'arrête.</li>

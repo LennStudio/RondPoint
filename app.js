@@ -1,11 +1,12 @@
 /* ============================================================
-   Rond Point ou Fake — logique de jeu
+   Giratoire ou Fake — logique de jeu
    Mort subite · niveaux de difficulté · thèmes · sons
    ============================================================ */
 (() => {
   'use strict';
 
-  const STORE_KEY = 'rondpointoufake:v2';
+  const STORE_KEY = 'giratoireoufake:v2';
+  const LEGACY_KEY = 'rondpointoufake:v2'; // ancien nom : sauvegarde migrée automatiquement
   const OLD_KEYS = ['rondpointoufake:v1'];
   const CATALOG_URL = 'data/images.json';
   const BASE_POINTS = 100;
@@ -55,7 +56,11 @@
     const base = emptyMemory();
     try {
       OLD_KEYS.forEach((k) => localStorage.removeItem(k));
-      const raw = localStorage.getItem(STORE_KEY);
+      let raw = localStorage.getItem(STORE_KEY);
+      if (!raw) {
+        raw = localStorage.getItem(LEGACY_KEY); // reprise de la sauvegarde sous l'ancien nom
+        if (raw) { localStorage.setItem(STORE_KEY, raw); localStorage.removeItem(LEGACY_KEY); }
+      }
       if (!raw) return base;
       const d = JSON.parse(raw);
       const best = emptyBest();

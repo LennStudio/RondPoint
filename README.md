@@ -1,6 +1,6 @@
-# Rond Point ou Fake
+# Giratoire ou Fake
 
-Jeu PWA : deux images par tour, une vraie photo de rond-point et une image générée par IA. Il faut trouver la vraie.
+Jeu PWA : deux images par tour, une vraie photo de giratoire et une image générée par IA. Il faut trouver la vraie.
 **Mort subite** : une seule erreur et la partie s'arrête. Trois niveaux de difficulté.
 
 ## Lancer
@@ -8,7 +8,7 @@ Jeu PWA : deux images par tour, une vraie photo de rond-point et une image gén�
 Un service worker et `fetch()` exigent un serveur HTTP (pas `file://`). N'importe quel serveur statique convient :
 
 ```bash
-cd rond-point-ou-fake
+cd giratoire-ou-fake
 python3 -m http.server 8080      # ou : npx serve   /   extension « Live Server » de VS Code
 # puis ouvrir http://localhost:8080
 ```
@@ -51,7 +51,7 @@ Un tour demande 1 vraie photo et 1 image IA du niveau choisi, jamais revues. Pr�
 - Thème sombre, clair ou automatique.
 - Mode daltonien : bleu et orange à la place du jaune et du rose, avec des symboles ✓ / ✕ et une pastille « Ton choix » en plus des couleurs.
 - Sons (synthétisés, aucun fichier) et vibrations discrets, coupables d'un clic avec le bouton haut-parleur.
-- Historique des parties et images déjà vues mémorisés dans `localStorage` (clé `rondpointoufake:v2`).
+- Historique des parties et images déjà vues mémorisés dans `localStorage` (clé `giratoireoufake:v2`).
 
 ## Fichiers
 
